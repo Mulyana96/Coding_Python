@@ -1,4 +1,4 @@
-
+#Biasakan membaca Bismillah
 #Membuat data mahasiswa
 #code Program
 list_siswa = []
