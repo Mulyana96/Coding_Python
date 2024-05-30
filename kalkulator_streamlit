@@ -1,1 +1,91 @@
+import streamlit as st
+import pandas as pd
 
+# Data untuk memori dan sejarah operasi
+memori = []
+sejarah = []
+
+def hitung(angka1, operator, angka2):
+  """Fungsi untuk menghitung hasil operasi aritmatika."""
+  if operator == "+":
+    hasil = angka1 + angka2
+  elif operator == "-":
+    hasil = angka1 - angka2
+  elif operator == "*":
+    hasil = angka1 * angka2
+  elif operator == "/":
+    if angka2 == 0:
+      hasil = "Error: Pembagian dengan nol"
+    else:
+      hasil = angka1 / angka2
+  else:
+    hasil = "Operator tidak valid"
+  return hasil
+
+def simpan_ke_memori(hasil):
+  """Fungsi untuk menyimpan hasil ke memori."""
+  memori.append(hasil)
+  st.success("Hasil disimpan ke memori!")
+
+def tampilkan_memori():
+  """Fungsi untuk menampilkan isi memori."""
+  if not memori:
+    st.write("Memori kosong.")
+  else:
+    st.write("Memori:")
+    for item in memori:
+      st.write(item)
+
+def hapus_memori():
+  """Fungsi untuk menghapus memori."""
+  global memori
+  memori = []
+  st.success("Memori dihapus!")
+
+def simpan_ke_sejarah(ekspresi, hasil):
+  """Fungsi untuk menyimpan ekspresi dan hasil ke sejarah."""
+  sejarah.append((ekspresi, hasil))
+  st.success("Operasi disimpan ke sejarah!")
+
+def tampilkan_sejarah():
+  """Fungsi untuk menampilkan sejarah operasi."""
+  if not sejarah:
+    st.write("Sejarah kosong.")
+  else:
+    st.write("Sejarah:")
+    for ekspresi, hasil in sejarah:
+      st.write(f"{ekspresi} = {hasil}")
+
+# Judul aplikasi
+st.title("Kalkulator Lengkap")
+
+# Input angka pertama
+angka1 = st.number_input("Masukkan angka pertama:")
+
+# Pilih operator
+operator = st.selectbox("Pilih operator:", ["+", "-", "*", "/", "^"])
+
+# Input angka kedua
+angka2 = st.number_input("Masukkan angka kedua:")
+
+# Tombol untuk menghitung
+if st.button("Hitung"):
+  # Hitung hasil
+  hasil = hitung(angka1, operator, angka2)
+
+  # Simpan hasil ke memori
+  st.button("Simpan ke Memori", on_click=simpan_ke_memori, args=(hasil,))
+
+  # Tampilkan hasil
+  st.write("Hasil:", hasil)
+
+  # Simpan ekspresi dan hasil ke sejarah
+  ekspresi = f"{angka1} {operator} {angka2}"
+  simpan_ke_sejarah(ekspresi, hasil)
+
+# Tombol untuk memori
+st.button("Tampilkan Memori", on_click=tampilkan_memori)
+st.button("Hapus Memori", on_click=hapus_memori)
+
+# Tombol untuk sejarah
+st.button("Tampilkan Sejarah", on_click=tampilkan_sejarah)
